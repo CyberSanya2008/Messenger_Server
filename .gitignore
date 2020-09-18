@@ -1,3 +1,4 @@
 /virtual_env
 /project/__pycache__
 /project/db.sqlite
+/.vscode

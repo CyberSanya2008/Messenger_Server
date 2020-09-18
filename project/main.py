@@ -1,4 +1,5 @@
 from flask import Blueprint
+from .models import User, Jopa
 from . import db
 
 main = Blueprint('main', __name__)

@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db
 import json
@@ -31,7 +32,7 @@ def registration():
         return redirect('/')
 
     # Добавление Пользователя, если email не существует в бд
-    new_user = new_user = User(email=email, name=name, password=password)
+    new_user = new_user = User(email=email, name=name, password=generate_password_hash(password))
 
     db.session.add(new_user)
     db.session.commit()

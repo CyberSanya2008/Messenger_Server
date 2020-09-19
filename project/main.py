@@ -44,35 +44,7 @@ def registration():
     return 'registration'
 
 
-@main.route('/login', methods=['POST'])
-def login_post():
-    data = request.data
-    parsed_data = json.loads(data)
-
-    email = parsed_data['email']
-    password = parsed_data['password']
-    checkbox = parsed_data['checkbox']
-
-    if checkbox == "True":
-        remember = True
-    else:
-        remember = False
-
-    user = User.query.filter_by(email=email).first()
-
-    if not user or not check_password_hash(user.password, password):
-        print("not")
-        return redirect('/')
-
-    login_user(user, remember=remember)
-    return redirect('/profile')
-
-    # print(email, password, checkbox)
-
-    return ""
-
-
-@main.route('/profile')
+@main.route('/profile', methods=["GET"])
 @login_required
 def profile():
-    return ("jopa")
+    return "jopa"

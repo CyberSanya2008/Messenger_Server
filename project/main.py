@@ -44,7 +44,15 @@ def registration():
     return 'registration'
 
 
-@main.route('/profile', methods=["GET"])
-@login_required
-def profile():
-    return "jopa"
+#  Вывод данных пользователя при правильном логине и пароле
+@main.route('/profile/<user_email>/<user_password>')
+def profile(user_email, user_password):
+
+    user = User.query.filter_by(email=user_email).first()
+
+    # Проверка email и пароля
+    if user and check_password_hash(user.password, password=user_password):
+        # Если успех
+        return user.name + user.email
+    # Если ошибка
+    return "error"

@@ -53,6 +53,6 @@ def profile(user_email, user_password):
     # Проверка email и пароля
     if user and check_password_hash(user.password, password=user_password):
         # Если успех
-        return user.name + user.email
+        return user.name
     # Если ошибка
     return "error"

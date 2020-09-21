@@ -1,7 +1,7 @@
 from flask import Blueprint, request, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import User
+from .models import User, Messages
 from . import db
 import json
 
@@ -44,7 +44,29 @@ def registration():
     return 'registration'
 
 
+@main.route('/sendmessage', methods=["POST"])
+def sendmessage():
+    data = request.data
+    parsed_data = json.loads(data)
+
+    reciever = parsed_data['reciever']
+    sender = parsed_data['sender']
+    message_text = parsed_data['message_text']
+
+    user = User.query.filter_by(email=reciever).first()
+    sender_user = User.query.filter_by(email=sender).first()
+
+    new_message = Messages(
+        text=message_text, sender_id=sender_user.id, receiver_id=user.id)
+
+    db.session.add(new_message)
+    db.session.commit()
+
+    return "jopa"
+
 #  Вывод данных пользователя при правильном логине и пароле
+
+
 @main.route('/profile/<user_email>/<user_password>')
 def profile(user_email, user_password):
 

@@ -78,3 +78,41 @@ def profile(user_email, user_password):
         return user.name
     # Если ошибка
     return "error"
+
+
+@main.route('/profile/messages/<user_email>/<user_password>')
+def showMessages(user_email, user_password):
+    user = User.query.filter_by(email=user_email).first()
+
+    if user and check_password_hash(user.password, password=user_password):
+        # Если успех
+        messages = Messages.query.filter_by(receiver_id=user.id).all()
+
+        for i in messages:
+            print(i.text)
+
+        print('jopa')
+        print(messages[0].text)
+        print(len(messages))
+
+        return messages[2].text
+
+    return "jopa"
+
+
+@main.route('/profile/dialogs/<user_email>/<user_password>')
+def showDialogs(user_email, user_password):
+    user = User.query.filter_by(email=user_email).first()
+    if user and check_password_hash(user.password, password=user_password):
+        # Если успех
+        messages = Messages.query.filter_by(receiver_id=user.id).all()
+
+        l = []
+
+        for i in range(len(messages)):
+            usertest = User.query.filter_by(id=messages[i].sender_id).first()
+            l.append(usertest.email)
+
+        return json.dumps(l)
+
+    return "error"

@@ -62,7 +62,7 @@ def sendmessage():
     db.session.add(new_message)
     db.session.commit()
 
-    return "jopa"
+    return "Ok"
 
 #  Вывод данных пользователя при правильном логине и пароле
 
@@ -77,7 +77,7 @@ def profile(user_email, user_password):
         # Если успех
         return user.name
     # Если ошибка
-    return "error"
+    return "Error"
 
 
 @main.route('/profile/messages/<user_email>/<user_password>')
@@ -97,7 +97,7 @@ def showMessages(user_email, user_password):
 
         return messages[2].text
 
-    return "jopa"
+    return "Error"
 
 
 @main.route('/profile/dialogs/<user_email>/<user_password>')
@@ -115,7 +115,7 @@ def showDialogs(user_email, user_password):
 
         return json.dumps(l)
 
-    return "error"
+    return "Error"
 
 
 # Поиск Пользователей
@@ -127,6 +127,12 @@ def find_user(user_email, user_password, search):
         find_user = User.query.filter(User.email.like('%'+search+'%')).all()
         print(len(find_user))
 
-        return "ok"
+        l = []
 
-    return "jopa"
+        for i in range(len(find_user)):
+
+            l.append(find_user[i].email)
+
+        return json.dumps(l)
+
+    return "Error"

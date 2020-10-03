@@ -30,7 +30,7 @@ def registration():
     # Проверка email
     user = User.query.filter_by(email=email).first()
     if user:
-        return redirect('/')
+        return "Error"
 
     # Добавление Пользователя, если email не существует в бд
     new_user = new_user = User(
@@ -116,3 +116,17 @@ def showDialogs(user_email, user_password):
         return json.dumps(l)
 
     return "error"
+
+
+# Поиск Пользователей
+@main.route('/<user_email>/<user_password>/users/<search>')
+def find_user(user_email, user_password, search):
+    user = User.query.filter_by(email=user_email).first()
+    if user and check_password_hash(user.password, password=user_password):
+        # Если успех
+        find_user = User.query.filter(User.email.like('%'+search+'%')).all()
+        print(len(find_user))
+
+        return "ok"
+
+    return "jopa"

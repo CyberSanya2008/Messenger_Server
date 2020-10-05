@@ -118,20 +118,27 @@ def showDialogs(user_email, user_password):
     return "Error"
 
 
-# Поиск Пользователей
+# Поиск Пользователей по почте
 @main.route('/<user_email>/<user_password>/users/<search>')
 def find_user(user_email, user_password, search):
     user = User.query.filter_by(email=user_email).first()
     if user and check_password_hash(user.password, password=user_password):
         # Если успех
-        find_user = User.query.filter(User.email.like('%'+search+'%')).all()
+        find_user = User.query.filter(User.email.like(
+            '%'+search+'%')).order_by(User.email).all()
         print(len(find_user))
 
         l = []
 
         for i in range(len(find_user)):
 
-            l.append(find_user[i].email)
+            if find_user[i].email.startswith(search):
+                l.append(find_user[i].email)
+
+        for i in range(len(find_user)):
+
+            if not find_user[i].email.startswith(search):
+                l.append(find_user[i].email)
 
         return json.dumps(l)
 

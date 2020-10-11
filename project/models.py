@@ -15,3 +15,8 @@ class Messages(db.Model):
     text = db.Column(db.String(200))
     sender_id = db.Column(db.Integer)
     receiver_id = db.Column(db.Integer)
+
+class Dialogs(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user1 = db.Column(db.Integer)
+    user2 = db.Column(db.Integer)

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import User, Messages
+from .models import User, Messages, Dialogs
 from . import db
 import json
 
@@ -143,3 +143,29 @@ def find_user(user_email, user_password, search):
         return json.dumps(l)
 
     return "Error"
+
+
+# Добавление диалогов
+@main.route('/create-dialog', methods=['POST'])
+def create_dialog():
+
+    data = request.data
+    parsed_data = json.loads(data)
+
+    user1 = parsed_data['user1']
+    user2 = parsed_data['user2']
+
+    # # Проверка email
+    # user = User.query.filter_by(email=email).first()
+    # if user:
+    #     return "Error"
+
+    # Добавление диалога
+    new_dialog = Dialogs(user1=user1, user2=user2)
+
+    db.session.add(new_dialog)
+    db.session.commit()
+
+    print(data)
+
+    return 'registration'

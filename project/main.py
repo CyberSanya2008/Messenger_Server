@@ -4,6 +4,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from .models import User, Messages, Dialogs
 from . import db
 import json
+from sqlalchemy import or_
 
 main = Blueprint('main', __name__)
 
@@ -105,13 +106,18 @@ def showDialogs(user_email, user_password):
     user = User.query.filter_by(email=user_email).first()
     if user and check_password_hash(user.password, password=user_password):
         # Если успех
+
         messages = Messages.query.filter_by(receiver_id=user.id).all()
-
+        dialogs1 = Dialogs.query.filter_by(user1=user.email).all()
+        dialogs2 = Dialogs.query.filter_by(user2=user.email).all()
+        # dialogs = Dialogs.query.filter_by(or_(Dialogs.user1==user_email), Dialogs.user2==user_email).all
         l = []
+        for i in dialogs1:
+            l.append(i.user2)
 
-        for i in range(len(messages)):
-            usertest = User.query.filter_by(id=messages[i].sender_id).first()
-            l.append(usertest.email)
+        for i in dialogs2:
+            l.append(i.user1)
+        print(l)
 
         return json.dumps(l)
 

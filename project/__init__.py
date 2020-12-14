@@ -1,9 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_socketio import SocketIO
 
 
 db = SQLAlchemy()
+socketio = SocketIO()
 
 
 def create_app():
@@ -13,6 +14,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 
     db.init_app(app)
+    socketio.init_app(app)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

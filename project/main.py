@@ -1,13 +1,20 @@
-from flask import Blueprint, request, redirect
+from flask import Blueprint, request, redirect, Flask
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User, Messages, Dialogs
 from . import db
+from . import socketio
+from flask_socketio import send
 import json
 from sqlalchemy import or_
 
 main = Blueprint('main', __name__)
 
+
+@socketio.on('message')
+def handleMessage(msg):
+    print('MEssage: +' + msg)
+    send(msg, broadcast=True)
 
 @main.route('/')
 def index():
